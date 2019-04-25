@@ -1,51 +1,6 @@
 #include"graphADT.h"
-/*
-< ADT > // need update!
-	VNF		get_type/price/calorie/capacity/major/minor/senDegree/CPUpree
-			is_proper
-			update_calorie/capacity
-	SFC		get_num/startNum/endNum/VNFList/avgCalorie
-			add_VNF
-			update_substatus/branchidx/avgCalorie/vnfCalorie
-	vertex	get_Num/AdjList/capacity/VNFPlacement/minCalorie/totalCalorie
-			add_Adjacent
-	graph	add_vertex
-			show_detail
-< Basic function >
-	toNum<num_type>		>num_type	string->num
-	toStr				>string		num->string
-	vectorPlus			>double		vector-plus
-	verticesMerge		将点号向量的对应点合并进点集
-	isInVertexSet		判断点是否在点集中
-	isDeadend			判断寻路中的点是否末路(判断其邻接表点是否全是前路或末路)
-	integerComposition	返回所有可能的整数组合
-< Init function >
-	init_getdata		读取数据文件
-	inti_getcalorie		SFC集合中所有SFC平均及所有其内VNF热值计算
-*/
 
-/*
-【算法】
-	get_declineRatio	VNF衰退比计算
-		get_senSitu		敏感情况，根据I导出e
-		get_cpuPree		CPU竞争衰退
-		get_declineNetIO	网络I/O竞争衰退
-
-	get_similarity		>double		计算链和点相似度
-
-	find_path			>vector<vertex>	寻路，返回点向量，或空集
-		get_similarity			>double		计算两个vector<VNF>余弦相似度
-		get_cutoff				>int		找近路点，返回点编号或-1
-		get_nextVertex			>int		找下一步，返回点编号或-1
-
-	deploy_sfc			>string			部署sfc，返回部署信息
-		cmp_placement			>bool		比较放置方案优劣的比较函数
-		get_actualRate			>double		计算实际服务率
-		get_declineCalorie		>double		计算损失的热值
-		is_fit					>bool		放置是否合适
-*/
-
-vector<double> get_senSitu(vector<double> senDegree) {	//敏感情况计算
+vector<double> get_senSitu(vector<double> senDegree) {	// sensitive situation
 	vector<double> e;
 	for (int i = 0; i < 3; i++) {
 		if (senDegree[i] > 0) e.push_back(1);
@@ -53,7 +8,7 @@ vector<double> get_senSitu(vector<double> senDegree) {	//敏感情况计算
 	}
 	return e;
 }
-double get_cpuPree(VNF VNF1, VNF VNF2) {		//CPU竞争衰退：C(Nk,Nl)
+double get_cpuPree(VNF VNF1, VNF VNF2) {		//CPU preemption：C(Nk,Nl)
 	double Ckl;
 	bool complementary = false;
 	vector<double> e1 = get_senSitu(VNF1.get_senDegree());
@@ -71,7 +26,7 @@ double get_cpuPree(VNF VNF1, VNF VNF2) {		//CPU竞争衰退：C(Nk,Nl)
 	}
 	return Ckl;
 }
-double get_declineNetIO(VNF VNF1, VNF VNF2) {	//网络I/O带宽竞争衰退：D(Nk,Nl), x=0.157, y=0.06, z=0.145, m,n=0.02
+double get_declineNetIO(VNF VNF1, VNF VNF2) {	//Network I/O bandwidth competition decline：D(Nk,Nl), x=0.157, y=0.06, z=0.145, m,n=0.02
 	double Dkl;
 	bool complementary = false;
 	vector<double> e1 = get_senSitu(VNF1.get_senDegree());
@@ -355,13 +310,13 @@ vector<vertex> find_path(graph GlobalMap, SFC s, int sub_startpoint, vector<vert
 	int endNum = s.get_endNum();
 	vector<VNF> list_request = s.get_VNFList();
 	int currentNum = startNum;
-	while (currentNum != endNum && currentNum != -1) {		//找到终点或者判定死局
-		int nextNum = get_nextVertex(GlobalMap, list_request, currentNum, endNum, pathSet, deadendSet);	//寻找下一点get_nextVertex
-		if (nextNum == -1) {								//无路可走则回溯
+	while (currentNum != endNum && currentNum != -1) {		// meet endnum or deadend
+		int nextNum = get_nextVertex(GlobalMap, list_request, currentNum, endNum, pathSet, deadendSet);	//find next vertex, get_nextVertex
+		if (nextNum == -1) {								// no way, backtrack
 			deadendSet.push_back(*GlobalMap.get_vertexIt(currentNum));
 			currentNum = pathSet.back().get_Num();
 			pathSet.pop_back();
-			if (pathSet.empty() && isDeadend(GlobalMap, currentNum, pathSet, deadendSet))		//死局：无路可走且无路可退
+			if (pathSet.empty() && isDeadend(GlobalMap, currentNum, pathSet, deadendSet))		// deadend: no way out, no way back
 				currentNum = -1;
 		}
 		else {
@@ -542,7 +497,7 @@ int main() {
 			process++;
 		}
 	}
-	cout << "testing done" << endl;
+	cout << "testing done" << endl << endl;
 	show_deployment(G);
 	system("pause");
 	return 0;

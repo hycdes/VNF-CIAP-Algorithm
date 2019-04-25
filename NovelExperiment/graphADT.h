@@ -263,7 +263,7 @@ void sort_sfc(vector<SFC> &S) {
 void init_getdata(string datapath_vnf, map<int, VNF> &vnfLib, string datapath_sfc, vector<SFC> &S, string datapath_graph, graph &G) {
 	string str_oneline;
 	ifstream vnf_data, vertex_data, sfc_data;
-	//录入VNF库
+	//load vnf_data
 	vnf_data.open(datapath_vnf);
 	while (!vnf_data.eof()) {
 		getline(vnf_data, str_oneline);
@@ -289,7 +289,7 @@ void init_getdata(string datapath_vnf, map<int, VNF> &vnfLib, string datapath_sf
 		vnfLib.insert(make_pair(temp_type, temp_vnf));
 	}
 	vnf_data.close();
-	//录入SFC信息
+	//load SFC_data
 	sfc_data.open(datapath_sfc);
 	while (!sfc_data.eof()) {
 		getline(sfc_data, str_oneline);
@@ -331,7 +331,7 @@ void init_getdata(string datapath_vnf, map<int, VNF> &vnfLib, string datapath_sf
 		S.push_back(temp_s);
 	}
 	sfc_data.close();
-	//录入图信息
+	//load graph_data
 	vertex_data.open(datapath_graph);
 	while (!vertex_data.eof()) {
 		getline(vertex_data, str_oneline);
@@ -351,7 +351,7 @@ void init_getdata(string datapath_vnf, map<int, VNF> &vnfLib, string datapath_sf
 	}
 	vertex_data.close();
 }
-void inti_getcalorie(vector<SFC> &S, map<int, double> &vnfSet) {	//SFC平均热值
+void inti_getcalorie(vector<SFC> &S, map<int, double> &vnfSet) {	//SFC avgCalorie
 	int totalNum = 0;
 	double totalCapacity = 0;
 	for (vector<SFC>::iterator itS = S.begin(); itS != S.end(); itS++) {		//count all VNF
