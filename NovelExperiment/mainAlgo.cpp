@@ -458,8 +458,8 @@ int main() {
 	vector<SFC> S;
 	map<int, VNF> vnfLib;
 	map<int, double> vnfSet_capacity;
-	string datapath_vnf = "C:/Users/42947/Desktop/Sample-NFV/vnf_data";
-	string datapath_sfc = "C:/Users/42947/Desktop/Sample-NFV/sfc_data";
+	string datapath_vnf = "C:/Users/42947/Desktop/Sample-NFV/vnf_data_new";
+	string datapath_sfc = "C:/Users/42947/Desktop/Sample-NFV/sfc_data_new";
 	string datapath_graph = "C:/Users/42947/Desktop/Sample-NFV/graph_data";
 	//initializing
 	init_getdata(datapath_vnf, vnfLib, datapath_sfc, S, datapath_graph, G);

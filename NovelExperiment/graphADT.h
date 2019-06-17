@@ -14,36 +14,37 @@
 
 constexpr auto INF = 99999;
 using namespace std;
-enum sensitive { CPU, cache, memory }; //sensitive resource: 0,1,2
-enum status { linear, branch_main, branch_sub }; //status of sfc: linear, have branches and is main-branch or sub-branch
-//class: VNF, SFC, vertex, graph
+enum sensitive { CPU, cache, memory }; //sensitive resource: CPU, cache, memory
+enum status { linear, branch_main, branch_sub }; //status of sfc: linear, main-branch or sub-branch
+
 class VNF {
 private:
-	int type;
-	double price, QoSCapacity, CPUpree, calorie;
-	sensitive s1, s2;
+	int _type;
+	double _price, _QoSCapacity, _CPUpree, _calorie;
+	sensitive _s1, _s2;
 	vector<double> senDegree;
 public:
 	VNF(int type, double price, double QoSCapacity, sensitive s1, sensitive s2, vector<double> senDegree, double CPUpree) {
-		this->type = type;
-		this->price = price;
-		this->calorie = 0;
-		this->QoSCapacity = QoSCapacity;
-		this->s1 = s1;
-		this->s2 = s2;
+		this->_type = type;
+		this->_price = price;
+		this->_QoSCapacity = QoSCapacity;
+		this->_CPUpree = CPUpree;
+		this->_calorie = 0;
+		this->_s1 = s1;
+		this->_s2 = s2;
 		this->senDegree = senDegree;
-		this->CPUpree = CPUpree;
 	}
-	int get_type() { return type; }
-	double get_price() { return price; }
-	double get_calorie() { return calorie; }
-	double get_QoSCapacity() { return QoSCapacity; }
-	sensitive get_major() { return s1; }
-	sensitive get_minor() { return s2; }
+	int get_type() { return _type; }
+	double get_price() { return _price; }
+	double get_calorie() { return _calorie; }
+	double get_QoSCapacity() { return _QoSCapacity; }
+	sensitive get_major() { return _s1; }
+	sensitive get_minor() { return _s2; }
 	vector<double> get_senDegree() { return senDegree; }
-	double get_CPUpree() { return CPUpree; }
-	void update_calorie(double calorie) { this->calorie = calorie; }
+	double get_CPUpree() { return _CPUpree; }
+	void update_calorie(double calorie) { this->_calorie = calorie; }
 };
+
 class SFC {
 private:
 	int _num, _start, _end, _branchidx;
@@ -102,10 +103,10 @@ public:
 	}
 	int get_Num() { return _num; }
 	double get_capacity() { return _capacity; }
-	bool is_pure() { return VNFPlace.empty(); }
-	bool is_saturated() { return _saturated; }
 	vector<int> get_AdjList() { return adjacentList; }
 	vector<VNF> get_VNFPlacement() { return VNFPlace; }
+	bool is_pure() { return VNFPlace.empty(); }
+	bool is_saturated() { return _saturated; }
 	void add_Adjacent(vertex v) { this->adjacentList.push_back(v.get_Num()); }
 	void add_VNF(VNF vnf) { VNFPlace.push_back(vnf); }
 	void update_saturated() { _saturated = true; }
